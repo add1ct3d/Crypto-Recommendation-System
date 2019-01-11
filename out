@@ -1,0 +1,546 @@
+new user 
+temp = 8
+	found semantic 8
+temp = 2631
+	found semantic 2631
+temp = buy
+	found semantic buy
+temp = /
+	found semantic /
+temp = sell
+	found semantic sell
+temp = bitcoin
+	found coin bitcoin
+temp = changes
+	found semantic changes
+temp = with
+	found semantic with
+temp = up
+	found semantic up
+temp = to
+	found semantic to
+temp = 100x
+	found semantic 100x
+temp = leverage
+	found semantic leverage
+temp = at
+	found semantic at
+temp = bitmex
+	found semantic bitmex
+temp = !
+	found semantic !
+temp = get
+	found semantic get
+temp = a
+	found semantic a
+temp = 10
+	found semantic 10
+temp = %
+	found semantic %
+temp = fee
+	found semantic fee
+temp = discount
+	found semantic discount
+temp = :
+	found semantic :
+temp = click
+	found semantic click
+temp = here
+	found semantic here
+temp = :
+	found semantic :
+temp = $mtl
+	found semantic $mtl
+temp = $dnt
+	found semantic $dnt
+temp = $xlm
+	found coin $xlm
+temp = $nano
+	found coin $nano
+temp = $mco
+	found coin $mco
+temp = $ardr
+	found coin $ardr
+temp = $btc
+	found coin $btc
+temp = $eth
+	found coin $eth
+temp = $icx
+	found coin $icx
+temp = $trx
+	found coin $trx
+temp = $btc
+	found coin $btc
+temp = $lsk
+	found coin $lsk
+temp = $neo
+	found coin $neo
+temp = $dash
+	found coin $dash
+temp = $eth
+	found coin $eth
+temp = $neo
+	found coin $neo
+temp = $link
+	found coin $link
+temp = $xrp
+	found coin $xrp
+temp = $ada
+	found coin $ada
+temp = $omg
+	found coin $omg
+temp = $xvg
+	found coin $xvg
+temp = $gvt
+	found semantic $gvt
+temp = $ltc
+	found coin $ltc
+temp = 15388702
+	found semantic 15388702
+temp = 50
+	found semantic 50
+temp = 8
+	found semantic 8
+temp = 4209
+	found semantic 4209
+temp = buy
+	found semantic buy
+temp = /
+	found semantic /
+temp = sell
+	found semantic sell
+temp = bitcoin
+	found coin bitcoin
+temp = changes
+	found semantic changes
+temp = with
+	found semantic with
+temp = up
+	found semantic up
+temp = to
+	found semantic to
+temp = 100x
+	found semantic 100x
+temp = leverage
+	found semantic leverage
+temp = at
+	found semantic at
+temp = bitmex
+	found semantic bitmex
+temp = !
+	found semantic !
+temp = get
+	found semantic get
+temp = a
+	found semantic a
+temp = 10
+	found semantic 10
+temp = %
+	found semantic %
+temp = fee
+	found semantic fee
+temp = discount
+	found semantic discount
+temp = :
+	found semantic :
+temp = click
+	found semantic click
+temp = here
+	found semantic here
+temp = :
+	found semantic :
+temp = $mtl
+	found semantic $mtl
+temp = $dnt
+	found semantic $dnt
+temp = $xlm
+	found coin $xlm
+temp = $nano
+	found coin $nano
+temp = $mco
+	found coin $mco
+temp = $ardr
+	found coin $ardr
+temp = $btc
+	found coin $btc
+temp = $eth
+	found coin $eth
+temp = $icx
+	found coin $icx
+temp = $trx
+	found coin $trx
+temp = $btc
+	found coin $btc
+temp = $lsk
+	found coin $lsk
+temp = $neo
+	found coin $neo
+temp = $dash
+	found coin $dash
+temp = $eth
+	found coin $eth
+temp = $neo
+	found coin $neo
+temp = $link
+	found coin $link
+temp = $xrp
+	found coin $xrp
+temp = $ada
+	found coin $ada
+temp = $omg
+	found coin $omg
+temp = $xvg
+	found coin $xvg
+temp = $gvt
+	found semantic $gvt
+temp = $ltc
+	found coin $ltc
+temp = 15386276
+	found semantic 15386276
+temp = 93
+	found semantic 93
+temp = 8
+	found semantic 8
+temp = 4357
+	found semantic 4357
+temp = buy
+	found semantic buy
+temp = /
+	found semantic /
+temp = sell
+	found semantic sell
+temp = bitcoin
+	found coin bitcoin
+temp = changes
+	found semantic changes
+temp = with
+	found semantic with
+temp = up
+	found semantic up
+temp = to
+	found semantic to
+temp = 100x
+	found semantic 100x
+temp = leverage
+	found semantic leverage
+temp = at
+	found semantic at
+temp = bitmex
+	found semantic bitmex
+temp = !
+	found semantic !
+temp = get
+	found semantic get
+temp = 10
+	found semantic 10
+temp = %
+	found semantic %
+temp = fee
+	found semantic fee
+temp = discount
+	found semantic discount
+temp = :
+	found semantic :
+temp = click
+	found semantic click
+temp = here
+	found semantic here
+temp = :
+	found semantic :
+temp = $qtum
+	found coin $qtum
+temp = $mtl
+	found semantic $mtl
+temp = $ark
+	found coin $ark
+temp = $dnt
+	found semantic $dnt
+temp = $xlm
+	found coin $xlm
+temp = $nano
+	found coin $nano
+temp = $mco
+	found coin $mco
+temp = $btc
+	found coin $btc
+temp = $eth
+	found coin $eth
+temp = $icx
+	found coin $icx
+temp = $trx
+	found coin $trx
+temp = $btc
+	found coin $btc
+temp = $neo
+	found coin $neo
+temp = $omg
+	found coin $omg
+temp = $lsk
+	found coin $lsk
+temp = $neo
+	found coin $neo
+temp = $dash
+	found coin $dash
+temp = $eth
+	found coin $eth
+temp = $neo
+	found coin $neo
+temp = $link
+	found coin $link
+temp = $btc
+	found coin $btc
+temp = $ada
+	found coin $ada
+temp = $xrp
+	found coin $xrp
+temp = $omg
+	found coin $omg
+temp = 1538795
+	found semantic 1538795
+new user 
+temp = 11
+	found semantic 11
+temp = 4411
+	found semantic 4411
+temp = ...
+	found semantic ...
+temp = looking
+	found semantic looking
+temp = at
+	found semantic at
+temp = the
+	found semantic the
+temp = current
+	found semantic current
+temp = landscape
+	found semantic landscape
+temp = of
+	found semantic of
+temp = exchanges
+	found semantic exchanges
+temp = [
+	found semantic [
+temp = houbi
+	found semantic houbi
+temp = &
+	found semantic &
+temp = eos
+	found coin eos
+temp = scandal
+	found semantic scandal
+term = scandal
+	semantic = -1.9
+temp = ];
+	found semantic ];
+temp = i
+	found semantic i
+temp = see
+	found semantic see
+temp = a
+	found semantic a
+temp = clear
+	found semantic clear
+term = clear
+	semantic = 1.6
+temp = effort
+	found semantic effort
+temp = to
+	found semantic to
+temp = not
+	found semantic not
+temp = support
+	found semantic support
+term = support
+	semantic = 1.7
+temp = some
+	found semantic some
+temp = blockchain
+	found semantic blockchain
+temp = tech
+	found semantic tech
+temp = do
+	found semantic do
+temp = to
+	found semantic to
+temp = the
+	found semantic the
+temp = large
+	found semantic large
+temp = exchanges
+	found semantic exchanges
+temp = stakes
+	found semantic stakes
+temp = in
+	found semantic in
+temp = its
+	found semantic its
+temp = inferior
+	found semantic inferior
+term = inferior
+	semantic = -1.7
+temp = competition
+	found semantic competition
+temp = [
+	found semantic [
+temp = $ela
+	found coin $ela
+temp = &
+	found semantic &
+temp = $xtz
+	found coin $xtz
+temp = ]
+	found semantic ]
+temp = to
+	found semantic to
+temp = name
+	found semantic name
+temp = two
+	found semantic two
+temp = ...
+	found semantic ...
+new user 
+temp = 15
+	found semantic 15
+temp = 18
+	found semantic 18
+temp = @cryptonityex
+	found semantic @cryptonityex
+temp = -
+	found semantic -
+temp = our
+	found semantic our
+temp = goal
+	found semantic goal
+temp = is
+	found semantic is
+temp = to
+	found semantic to
+temp = be
+	found semantic be
+temp = an
+	found semantic an
+temp = exchange
+	found semantic exchange
+temp = that
+	found semantic that
+temp = is
+	found semantic is
+temp = respected
+	found semantic respected
+term = respected
+	semantic = 2.1
+temp = by
+	found semantic by
+temp = the
+	found semantic the
+temp = cryptocurrency
+	found semantic cryptocurrency
+temp = community
+	found semantic community
+temp = .
+	found semantic .
+temp = we
+	found semantic we
+temp = aim
+	found semantic aim
+temp = at
+	found semantic at
+temp = providing
+	found semantic providing
+temp = the
+	found semantic the
+temp = m
+	found semantic m
+temp = #eth
+	found semantic #eth
+temp = 15
+	found semantic 15
+temp = 2375
+	found semantic 2375
+temp = hello
+	found semantic hello
+temp = community
+	found semantic community
+temp = @cryptonityex
+	found semantic @cryptonityex
+temp = feel
+	found semantic feel
+temp = free
+	found semantic free
+term = free
+	semantic = 2.3
+temp = to
+	found semantic to
+temp = share
+	found semantic share
+term = share
+	semantic = 1.2
+temp = your
+	found semantic your
+temp = thoughts
+	found semantic thoughts
+temp = about
+	found semantic about
+temp = cryptonity
+	found semantic cryptonity
+temp = on
+	found semantic on
+temp = our
+	found semantic our
+temp = bitcointalk
+	found semantic bitcointalk
+temp = announcement
+	found semantic announcement
+temp = page
+	found semantic page
+temp = :
+	found semantic :
+temp = h
+	found semantic h
+temp = #btc
+	found semantic #btc
+new user 
+temp = 24
+	found semantic 24
+temp = 1868
+	found semantic 1868
+temp = @rawmaterialnyc
+	found semantic @rawmaterialnyc
+temp = @joelkatz
+	found semantic @joelkatz
+temp = @aridavidpaul
+	found semantic @aridavidpaul
+temp = @grace_za
+	found semantic @grace_za
+temp = @_mbi__
+	found semantic @_mbi__
+temp = @ripplebull
+	found semantic @ripplebull
+temp = @tomchannick
+	found semantic @tomchannick
+temp = $580
+	found semantic $580
+temp = is
+	found semantic is
+temp = obviously
+	found semantic obviously
+temp = impossible
+	found semantic impossible
+temp = .
+	found semantic .
+temp = xrp
+	found coin xrp
+temp = is
+	found semantic is
+temp = too
+	found semantic too
+temp = fast
+	found semantic fast
+temp = to
+	found semantic to
+temp = have
+	found semantic have
+temp = real
+	found semantic real
+temp = value
+	found semantic value
