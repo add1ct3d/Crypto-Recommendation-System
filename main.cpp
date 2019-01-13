@@ -68,6 +68,15 @@ void InitCryptoMap(string coins_path){
 }
 
 
+string getCryptoName(int ident){
+	int i = 0;
+	for(map<string,string>::iterator it = CryptoMap.begin(); it != CryptoMap.end(); ++it) {	
+		if(i == ident)return it->first;
+		i++;
+	}
+}
+
+
 
 string CryptoDictionary(string coins_path,string coin){
 	ifstream coins_dict;
@@ -118,6 +127,11 @@ double SemanticDictionary(string semantic_path,string term){
 	return 0.0;
 }
 
+
+typedef struct CoinScore{
+	string coin;
+	double score;
+} CoinScore;
 
 int main(int argc , char* argv[]){
 
@@ -214,8 +228,31 @@ int main(int argc , char* argv[]){
 	LSH_Build_Cosine(HashTables,L,d,Points);
 	
 	PrintAll(HashTables,L);
-	LSH_Cosine_Recommend(HashTables,L,Points);
-
+	vector<vector<double>> recommendations = LSH_Cosine_Recommend(HashTables,L,Points);
+	assert(recommendations.size() == Users.size());
+	for(int i = 0 ; i < Users.size() ; i++){
+		User& u = Users.at(i);
+		vector<bool> assigned = u.getAssigned();
+		vector<double> RU = recommendations.at(i);
+		sort(RU.begin(),RU.end());
+		vector<CoinScore> best;
+		int coin_num = 0;
+		cout << "UserID "<<u.getID()<<endl;
+		cout<<"Recommend :"<<endl;
+		int max_c = 0;
+		for(vector<double>::iterator it = RU.begin() ; it != RU.end() ; it++){
+			if(assigned.at(coin_num) == false){
+				;//cout<<"\t"<<getCryptoName(coin_num)<< " assigned"<<endl;
+			}
+			else {
+				cout<<"\t BUY "<<getCryptoName(coin_num)<< endl;
+				max_c++;
+				if(max_c == 5)break;
+			}
+			coin_num++;
+			
+		}
+	}
 
 
 	coins_dict.close();

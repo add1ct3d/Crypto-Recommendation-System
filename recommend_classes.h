@@ -5,7 +5,7 @@ using namespace std;
 
 string CryptoDictionary(string coins_path,string coin);
 double SemanticDictionary(string semantic_path,string term);
-void LSH_Cosine_Recommend(vector<HashTable>&  HashTables,int L,vector<Point>& queries);
+vector<vector<double>> LSH_Cosine_Recommend(vector<HashTable>&  HashTables,int L,vector<Point>& queries);
 
 map<string,string> CryptoMap;
 static const int alpha = 15;
@@ -171,6 +171,20 @@ public:
 			if(it->second == numeric_limits<double>::infinity())it->second = 0;
 			else it->second -= avg;
 		}
+	}
+
+	vector<bool> getAssigned(){
+		vector<bool> result;
+		vector<string> coins;
+		for(map<string,string>::iterator it = CryptoMap.begin() ; it != CryptoMap.end() ; it++){
+			coins.push_back(CryptoMap[it->first]);
+		}
+		auto last = std::unique(coins.begin(),coins.end());
+		coins.erase(last, coins.end());
+		for(vector<string>::iterator it = coins.begin() ; it != coins.end() ; it++){
+			result.push_back(artificial[*it]);
+		}
+		return result;
 	}
 
 	vector<string> getFake(){

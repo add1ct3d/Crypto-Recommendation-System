@@ -34,6 +34,7 @@ public:
 	string cosine_g;
 	Point(){
 		std::cout << "Construct a default point"<<std::endl;
+		exit(0);
 		this->item_id = ++id;
 		this->fields.clear();		
 		(this->g).clear();

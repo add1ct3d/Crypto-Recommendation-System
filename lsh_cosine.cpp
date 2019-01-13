@@ -50,8 +50,8 @@ void LSH_Init_Cosine(vector<HashTable>&  HashTables,int L,int d){
 	assert(TableSize > 0);
 	assert(L > 0);
 
-	random_device normal_generator;
-	normal_distribution<double> normal_distribution(-20,20);
+	std::random_device normal_generator;
+	normal_distribution<double> normal_distribution(0.0,1.0);
 
 
 	for(int l = 0 ; l < L ; l++){
@@ -133,60 +133,6 @@ void LSH_Hash_Cosine(vector<HashTable>&  HashTables,int L,int d,vector<Point>& d
 	}
 }
 
-
-
-void LSH_Cosine_Recommend(vector<HashTable>&  HashTables,int L,vector<Point>& queries){
-	data_type R = 1.0;//default
-	int query_points = queries.size();
-	int found_items = 0;
-	double e = 0.05;
-	int K = HashTables.at(0).K;
-	int TableSize = HashTables.at(0).TableSize;
-
-	for(int query = 0 ; query < query_points; query++){
-
-		cout <<std::endl<<"--------------------"<<std::endl;
-		cout <<std::endl<<"--------------------"<<std::endl;
-		cout <<"(cosine)Query:"<< query<<std::endl;
-		data_type min_dist = 10*R;
-		
-		int items_found = 0;		
-		cout<<"R-near neighbours:"<<std::endl;
-			
-		vector<int> gv[L];	
-
-		for(int l = 0 ; l < L ; l++){
-			cout<<"\t HashTable :"<<l<<endl;
-			HashTable* hash = &(HashTables.at(l));
-			Point& p = queries.at(query); 
-			cout<<"Query ID "<<p.get_id()<<endl;
-			string gs;	
-			for(int k = 0 ; k < K  ; k++){
-				gs.push_back(cosine_h(p,hash->cosine_r.at(k),K));
-			}
-
-			int bucket = cosine_g(gs,hash->shuffle_idents,K);	
-			bucket = bucket % TableSize;
-			assert(bucket >= 0);
-			for(vector<Point*>::iterator it = ((hash->data).at(bucket)).begin() 
-				; it != ((hash->data).at(bucket)).end() ;it++ ){
-				Point* point_ptr = *it;
-				if(true){	
-					if(point_ptr->cosine_g != gs){
-						continue;
-					}
-				}			
-				data_type dist = CosineDistance(*point_ptr,p);
-				//assert(dist >= 0);
-				if(dist <= (1+e)*R){			
-					items_found++;
-					cout<<"Item"<<point_ptr->get_id()<<std::endl;
-					if(items_found > 3*L)break;
-				}				
-			}	
-		}	
-	}
-}
 
 
 
