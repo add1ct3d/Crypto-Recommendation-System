@@ -194,7 +194,7 @@ void LSH_Hash_Euclidean(vector<HashTable>&  HashTables,int L,int d,vector<Point>
 	data_type e = 0.05; // acceptance to error
 	for(int i = 0 ; i < dataset.size() ; i++){
 
-		cout<<"(euclidean)point "<<i+1<<endl;	
+		//cout<<"(euclidean)point "<<i+1<<endl;	
 		int bucket = -1;
 		vector<int> gv[L];
 		for(int l = 0 ; l < L ; l++){

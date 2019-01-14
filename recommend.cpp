@@ -130,23 +130,23 @@ vector<vector<double>> LSH_Cosine_Recommend(vector<HashTable>&  HashTables,int L
 	vector<vector<double>> result;
 	for(int query = 0 ; query < query_points; query++){
 
-		cout <<std::endl<<"--------------------"<<std::endl;
-		cout <<std::endl<<"--------------------"<<std::endl;
-		cout <<"(cosine)Query:"<< query<<std::endl;
+		//cout <<std::endl<<"--------------------"<<std::endl;
+		//cout <<std::endl<<"--------------------"<<std::endl;
+		//cout <<"(cosine)Query:"<< query<<std::endl;
 		data_type min_dist = 10*R;
 		
 		int items_found = 0;		
-		cout<<"R-near neighbours:"<<std::endl;
+		//cout<<"R-near neighbours:"<<std::endl;
 			
 		Point& p = users.at(query); 	
 		vector<int> gv[L];	
 		vector<Distance> neighbors;
 
 		for(int l = 0 ; l < L ; l++){
-			cout<<"\t HashTable :"<<l<<endl;
+			//cout<<"\t HashTable :"<<l<<endl;
 			HashTable* hash = &(HashTables.at(l));
 			
-			cout<<"Query ID "<<p.get_id()<<endl;
+			//cout<<"Query ID "<<p.get_id()<<endl;
 			string gs;	
 			for(int k = 0 ; k < K  ; k++){
 				gs.push_back(cosine_h(p,hash->cosine_r.at(k),K));
@@ -166,12 +166,12 @@ vector<vector<double>> LSH_Cosine_Recommend(vector<HashTable>&  HashTables,int L
 				data_type dist = CosineDistance(*point_ptr,p);
 				if(dist <= (1+e)*R){			
 					items_found++;
-					cout<<"\t\t-- found Item ID"<<point_ptr->get_id()<<std::endl;
+					//cout<<"\t\t-- found Item ID"<<point_ptr->get_id()<<std::endl;
 					if(point_ptr->get_id() != p.get_id()){
 						neighbors.push_back(Distance(dist,*point_ptr));
 
 					}
-					else cout<<"\t\t\tsame id"<<endl;
+					//else cout<<"\t\t\tsame id"<<endl;
 
 				}				
 			}
@@ -181,10 +181,10 @@ vector<vector<double>> LSH_Cosine_Recommend(vector<HashTable>&  HashTables,int L
 		std::sort(neighbors.begin(),neighbors.end(),c);
 		auto last = std::unique(neighbors.begin(), neighbors.end(),eq);
 		neighbors.erase(last, neighbors.end());
-		cout<<"Printing Best "<<Max_neighbors<<" Distances"<<endl;
+		//cout<<"Printing Best "<<Max_neighbors<<" Distances"<<endl;
 		int i = 0;
 		for(vector<Distance>::iterator it = neighbors.begin() ; it != neighbors.end() ; it++){
-			cout<<it->getPoint()->get_id()<<": "<<it->getDist()<<endl;
+			//cout<<it->getPoint()->get_id()<<": "<<it->getDist()<<endl;
 			i++;
 			if(i == Max_neighbors)break;
 		}
@@ -198,44 +198,47 @@ vector<vector<double>> LSH_Cosine_Recommend(vector<HashTable>&  HashTables,int L
 
 
 
-vector<vector<double>> Cluster_Euclidean_Recommend(Cluster_Struct& CLUSTERS,vector<Point>& users){
+vector<vector<double>> Cluster_Euclidean_Recommend(Cluster_Struct& CLUSTERS,vector<Point>& centroids,vector<Point>& users){
 	int Max_neighbors = 20;
 	int query_points = users.size();
 	int found_items = 0;
 	vector<vector<double>> result;
+
 	for(int query = 0 ; query < query_points; query++){
 
-		cout <<std::endl<<"--------------------"<<std::endl;
-		cout <<std::endl<<"--------------------"<<std::endl;
-		cout <<"(euclidean)Query:"<< query<<std::endl;
+		//cout <<std::endl<<"--------------------"<<std::endl;
+		//cout <<std::endl<<"--------------------"<<std::endl;
+		//cout <<"(euclidean)Query:"<< query<<std::endl;
 		int items_found = 0;		
-		cout<<"Cluster-near neighbours:"<<std::endl;		
+		//cout<<"Cluster-near neighbours:"<<std::endl;		
 		Point& p = users.at(query); 	
 		vector<Distance> neighbors;
 		vector<Point>* cluster;
-		for(int i = 0  ; i < CLUSTERS.size()  ;i++ ){
-			if(CLUSTERS.at(i)->at(0).get_centroid_id() == p.get_centroid_id()){
+		for(int i = 0  ; i < centroids.size()  ;i++ ){
+			//cout<<centroids.at(i).get_id() << " != "<<p.get_centroid_id()<<endl;
+			if(centroids.at(i).get_id() == p.get_centroid_id()){
 				cluster = CLUSTERS.at(i);
+				break;
 			}
 		}
 		for(vector<Point>::iterator it = cluster->begin() ; it != cluster->end() ;it++ ){
 			Point& point = *it;						
 			data_type dist = EuclideanDistance(point,p);	
-			cout<<"\t\t-- found Item ID"<<point.get_id()<<std::endl;
+			//cout<<"\t\t-- found Item ID"<<point.get_id()<<std::endl;
 			if(point.get_id() != p.get_id()){
 				neighbors.push_back(Distance(dist,point));
 			}
-			else cout<<"\t\t\tsame id"<<endl;			
+			//else cout<<"\t\t\tsame id"<<endl;			
 		}		
 		comparison c;
 		equality eq;
 		std::sort(neighbors.begin(),neighbors.end(),c);
 		auto last = std::unique(neighbors.begin(), neighbors.end(),eq);
 		neighbors.erase(last, neighbors.end());
-		cout<<"Printing Best "<<Max_neighbors<<" Distances"<<endl;
+		//cout<<"Printing Best "<<Max_neighbors<<" Distances"<<endl;
 		int i = 0;
 		for(vector<Distance>::iterator it = neighbors.begin() ; it != neighbors.end() ; it++){
-			cout<<it->getPoint()->get_id()<<": "<<it->getDist()<<endl;
+			//cout<<it->getPoint()->get_id()<<": "<<it->getDist()<<endl;
 			i++;
 			if(i == Max_neighbors)break;
 		}

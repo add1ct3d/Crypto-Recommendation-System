@@ -24,15 +24,18 @@ using namespace std;
 
 void Assign_Lloyd(Cluster_Struct& CLUSTERS,std::vector<Point>& dataset,std::vector<Point>& centroids,std::string metric){
 //Lloyd’s assignment - Assign each object to its nearest center.
-	cout<<"Lloyd’s assignment"<<endl;
+	//cout<<"Lloyd’s assignment"<<endl;
 	assert((metric == "euclidean") or (metric == "cosine"));
 
 	for(int i = 0 ; i < dataset.size() ; i++){
-		if(dataset.at(i).is_assigned())continue;
+		if(dataset.at(i).is_assigned()){
+			//cout<<"assigned"<<endl;
+			continue;
+		}
 		double min_dist = std::numeric_limits<double>::max();
 		double min_centroid_ident = -1;
 
-		cout<<"ASSIGN : Point :"<<i+1<<endl;
+		//cout<<"ASSIGN : Point :"<<i+1<<endl;
 		for(int c = 0 ; c < centroids.size() ; c++){
 			double dist;
 			if(metric == "euclidean")
@@ -46,7 +49,9 @@ void Assign_Lloyd(Cluster_Struct& CLUSTERS,std::vector<Point>& dataset,std::vect
 				assert(min_dist >= 0);			
 			}
 		}
-		cout<<"assign point:"<<dataset.at(i).get_id()<<" to centroid:"<<min_centroid_ident<<endl;
+		//cout<<"assign point:"<<dataset.at(i).get_id()<<" to centroid:"<<min_centroid_ident<<endl;
+		dataset.at(i).set_centroid(centroids.at(min_centroid_ident).get_id(),
+			centroids.at(min_centroid_ident).get_all_fields());
 		CLUSTERS.at(min_centroid_ident)->push_back(dataset.at(i));
 	}
 

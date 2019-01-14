@@ -70,7 +70,6 @@ void LSH_Init_Cosine(vector<HashTable>&  HashTables,int L,int d){
 		}
 		assert(hash->cosine_r.size() == K);
 	}
-	cout<<"1"<<endl;
 
 	
 	random_device shuffle_generator;
@@ -111,7 +110,7 @@ void LSH_Hash_Cosine(vector<HashTable>&  HashTables,int L,int d,vector<Point>& d
 
 
 	for(int i = 0 ; i < dataset.size() ; i++){
-		cout<<"(cosine) point "<<i<<endl;
+		//cout<<"(cosine) point "<<i<<endl;
 
 		for(int l = 0 ; l < L ; l++){
 
@@ -160,19 +159,19 @@ void LSH_Range_Cosine(Cluster_Struct& CLUSTERS,vector<HashTable>&  HashTables,in
 	R = init_R; //reset range
 	for(int loop = 0 ; loop < max_loops ; loop++){
 
-		cout<<"RANGE SEARCH R = "<<R<<endl;
+		//cout<<"RANGE SEARCH R = "<<R<<endl;
 		vector<Point*> points_to_assign;
 		points_to_assign.clear();
 
 		for(int centroid = 0 ; centroid < centroid_points; centroid++){
 			assert(CLUSTERS.size() == centroid_points);
-			cout<<" Centroid :"<<centroid<<endl;
+			//cout<<" Centroid :"<<centroid<<endl;
 			const clock_t begin_time = clock();
 			Point& p = centroids.at(centroid); 	
 			vector<int> gv[L];	
 
 			for(int l = 0 ; l < L ; l++){
-				cout<<"\t HashTable :"<<l<<endl;
+				//cout<<"\t HashTable :"<<l<<endl;
 				HashTable* hash = &(HashTables.at(l));
 				
 

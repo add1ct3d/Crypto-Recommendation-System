@@ -85,12 +85,12 @@ public:
 			string coin = CryptoDictionary(coins_path,temp);
 			if(coin != ""){
 				coins.push_back(CryptoMap[temp]);
-				cout<<"\t\t\tfound coin "<<temp<< " ("<<CryptoMap[temp]<<")"<<endl;
+				//cout<<"\t\t\tfound coin "<<temp<< " ("<<CryptoMap[temp]<<")"<<endl;
 			}
 			else{
 				double prev = score;
 				score += SemanticDictionary(semantic_path,temp);
-				if(score-prev != 0)cout << "\tfound semantic "<<score-prev<<endl;
+				//if(score-prev != 0)cout << "\tfound semantic "<<score-prev<<endl;
 
 			}
 		}

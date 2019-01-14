@@ -22,41 +22,20 @@ using namespace std;
 
 std::vector<Point> Init_Random(std::vector<Point>& dataset,int num_clusters){
 	
-	cout<<"Random selection of "<<num_clusters<<" points (simplest)"<<endl;
-
-	std::random_device gen;
-	uniform_int_distribution<int> distr(0,dataset.size()-1);
+	//cout<<"Random selection of "<<num_clusters<<" points (simplest)"<<endl;
 	std::vector<Point> centroids;
-	int idents[num_clusters];
 	centroids.clear();
-
-	bool diff=false;
-	while(diff != true){
-		for(int i = 0 ; i < num_clusters; i++){
-			
-			idents[i] = distr(gen);
-
-			diff = true;
-			for(int k = 0 ; k < i ; k++){
-				if(idents[i] == idents[k]){
-					diff = false;
-					break;
-				}
-			}
-			if(diff == false){
-				break;
-			}
-		}
-	}
-
+	vector<int> random_points;
+	for(int i = 0  ; i < dataset.size() ; i++){
+		random_points.push_back(i);
+	}	
+	random_shuffle(random_points.begin(),random_points.end());
 	for(int i = 0 ; i < num_clusters  ; i++){
-		centroids.push_back(dataset.at(idents[i]));
+		dataset.at(random_points.at(i)).set_centroid(i+1,dataset.at(random_points.at(i)).get_all_fields());
+		centroids.push_back(dataset.at(random_points.at(i)));
 	}
-	assert(diff == true);
 	assert(centroids.size() == num_clusters);
-	
 	return centroids;
-
 }
 
 
