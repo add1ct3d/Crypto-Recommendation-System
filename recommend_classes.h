@@ -1,5 +1,5 @@
-#ifndef  CLASSES_H
-#define CLASSES_H
+#ifndef  RECOMMEND_CLASSES_H
+#define RECOMMEND_CLASSES_H
 
 using namespace std;
 
@@ -8,6 +8,11 @@ double SemanticDictionary(string semantic_path,string term);
 vector<vector<double>> LSH_Cosine_Recommend(vector<HashTable>&  HashTables,int L,vector<Point>& queries);
 
 map<string,string> CryptoMap;
+map<int,string> MessageID;
+
+
+
+
 static const int alpha = 15;
 
 class Score{
@@ -56,6 +61,7 @@ public:
 	Tweet(int id,string text){
 		this->text = text;
 		this->id = id;
+		MessageID[id] = text;
 	}
 	string getText(){
 		return this->text;
@@ -73,7 +79,7 @@ public:
 		boost::char_separator<char> sep("\t");
 		boost::tokenizer<boost::char_separator<char>> tok(this->text, sep);
 		double score = 0;
-		cout<<"search tweet "<<this->text<<endl;
+		//cout<<"search tweet "<<this->text<<endl;
 		for (boost::tokenizer<boost::char_separator<char>>::iterator it=tok.begin(); it!=tok.end();it++) {
 			string temp = *it;
 			string coin = CryptoDictionary(coins_path,temp);
@@ -182,7 +188,7 @@ public:
 		auto last = std::unique(coins.begin(),coins.end());
 		coins.erase(last, coins.end());
 		for(vector<string>::iterator it = coins.begin() ; it != coins.end() ; it++){
-			result.push_back(artificial[*it]);
+			result.push_back(not artificial[*it]);
 		}
 		return result;
 	}
@@ -234,6 +240,8 @@ private:
 	map<string,bool> artificial;
 	int id;
 };
+
+
 
 
 #endif

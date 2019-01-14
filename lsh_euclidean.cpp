@@ -117,6 +117,7 @@ void LSH_Init_Euclidean(vector<HashTable>&  HashTables,int L,int d){
 			h->t.push_back(uni_distribution(generator));
 		}
 	}
+
 /* 	======= r Initialization  ========
 	r is used in euclidean phi to 
 	calculate the inner product of rh
@@ -138,7 +139,6 @@ void LSH_Init_Euclidean(vector<HashTable>&  HashTables,int L,int d){
 			h->r.push_back(item);
 		}
 	}
-
 	/* 	========= g function preprocessing ========
 	g is a vector of distinctly shuffled h-functions
 	shuffling is assisted by the shuffle_idents vector.
@@ -192,7 +192,6 @@ void LSH_Hash_Euclidean(vector<HashTable>&  HashTables,int L,int d,vector<Point>
 	double W = HashTables.at(0).W; // window size : determines the size of the buckets. 
 	int TableSize = HashTables.at(0).TableSize; // number of buckets per hash_tabl
 	data_type e = 0.05; // acceptance to error
-
 	for(int i = 0 ; i < dataset.size() ; i++){
 
 		cout<<"(euclidean)point "<<i+1<<endl;	
@@ -216,7 +215,6 @@ void LSH_Hash_Euclidean(vector<HashTable>&  HashTables,int L,int d,vector<Point>
 			gv[l].clear();
 			euclidean_g(gv[l],h,hash->shuffle_idents,K);
 		}
-
 		for(int l = 0 ; l < L ; l++){
 			HashTable* hash = &(HashTables.at(l));
 			int bucket = euclidean_phi(hash->r,gv[l],K,TableSize);

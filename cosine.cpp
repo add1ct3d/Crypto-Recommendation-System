@@ -46,8 +46,10 @@ char cosine_h(Point& point,vector<data_type>* r,int K){
 		string s;
 		s.assign(*it);
 		data_type item = atof(s.c_str());
+		//cout<<"COSINE ITEM = "<<item<<endl;
 		p.push_back(item);
 	}
+
 	assert(p.size() == r->size());
 
 	if((data_type)inner_product(p.begin(),p.begin()+p.size(),r->begin(),0) >= 0){

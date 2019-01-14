@@ -29,9 +29,7 @@ AM:1115201400027
 #include "utility.h"
 #include <map>
 #include <algorithm>
-
 using namespace std;
-
 
 
 class Distance{
@@ -66,6 +64,9 @@ typedef struct {
 		return a.getDist() == b.getDist();
 	}   
 } equality;
+
+
+
 
 
 
@@ -191,3 +192,56 @@ vector<vector<double>> LSH_Cosine_Recommend(vector<HashTable>&  HashTables,int L
 	}
 	return result;
 }
+
+
+
+
+
+
+vector<vector<double>> Cluster_Euclidean_Recommend(Cluster_Struct& CLUSTERS,vector<Point>& users){
+	int Max_neighbors = 20;
+	int query_points = users.size();
+	int found_items = 0;
+	vector<vector<double>> result;
+	for(int query = 0 ; query < query_points; query++){
+
+		cout <<std::endl<<"--------------------"<<std::endl;
+		cout <<std::endl<<"--------------------"<<std::endl;
+		cout <<"(euclidean)Query:"<< query<<std::endl;
+		int items_found = 0;		
+		cout<<"Cluster-near neighbours:"<<std::endl;		
+		Point& p = users.at(query); 	
+		vector<Distance> neighbors;
+		vector<Point>* cluster;
+		for(int i = 0  ; i < CLUSTERS.size()  ;i++ ){
+			if(CLUSTERS.at(i)->at(0).get_centroid_id() == p.get_centroid_id()){
+				cluster = CLUSTERS.at(i);
+			}
+		}
+		for(vector<Point>::iterator it = cluster->begin() ; it != cluster->end() ;it++ ){
+			Point& point = *it;						
+			data_type dist = EuclideanDistance(point,p);	
+			cout<<"\t\t-- found Item ID"<<point.get_id()<<std::endl;
+			if(point.get_id() != p.get_id()){
+				neighbors.push_back(Distance(dist,point));
+			}
+			else cout<<"\t\t\tsame id"<<endl;			
+		}		
+		comparison c;
+		equality eq;
+		std::sort(neighbors.begin(),neighbors.end(),c);
+		auto last = std::unique(neighbors.begin(), neighbors.end(),eq);
+		neighbors.erase(last, neighbors.end());
+		cout<<"Printing Best "<<Max_neighbors<<" Distances"<<endl;
+		int i = 0;
+		for(vector<Distance>::iterator it = neighbors.begin() ; it != neighbors.end() ; it++){
+			cout<<it->getPoint()->get_id()<<": "<<it->getDist()<<endl;
+			i++;
+			if(i == Max_neighbors)break;
+		}
+		result.push_back(CalculateWeightedRecommendation(neighbors));	
+	}
+	return result;
+}
+
+

@@ -27,16 +27,16 @@ AM:1115201400027
 #include "lsh.h"
 #include "cosine.h"
 #include "utility.h"
-#include <map>
-#include <algorithm>
 
 using namespace std;
 
 
 void LSH_Build_Cosine(vector<HashTable>&  HashTables,int L,int d,vector<Point>& dataset){
 	cout<<"Building LSH"<<endl;
-	LSH_Init_Cosine(HashTables,L,d);	
+	LSH_Init_Cosine(HashTables,L,d);
+	cout<<"init"<<endl;	
 	LSH_Hash_Cosine(HashTables,L,d,dataset);
+	cout<<"Hash"<<endl;
 }
 
 
@@ -50,7 +50,7 @@ void LSH_Init_Cosine(vector<HashTable>&  HashTables,int L,int d){
 	assert(TableSize > 0);
 	assert(L > 0);
 
-	std::random_device normal_generator;
+	random_device normal_generator;
 	normal_distribution<double> normal_distribution(0.0,1.0);
 
 
@@ -70,6 +70,7 @@ void LSH_Init_Cosine(vector<HashTable>&  HashTables,int L,int d){
 		}
 		assert(hash->cosine_r.size() == K);
 	}
+	cout<<"1"<<endl;
 
 	
 	random_device shuffle_generator;
@@ -106,7 +107,7 @@ void LSH_Hash_Cosine(vector<HashTable>&  HashTables,int L,int d,vector<Point>& d
 	TableSize = pow(2,K);
 	cout<<"TableSize = "<<TableSize<<endl;
 	assert(TableSize > 0);
-	assert(L > 0);
+	assert(L > 0);	
 
 
 	for(int i = 0 ; i < dataset.size() ; i++){
