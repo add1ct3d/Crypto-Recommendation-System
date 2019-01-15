@@ -204,6 +204,7 @@ vector<vector<double>> Cluster_Euclidean_Recommend(Cluster_Struct& CLUSTERS,vect
 	int found_items = 0;
 	vector<vector<double>> result;
 
+	cout<<"query"<<endl;
 	for(int query = 0 ; query < query_points; query++){
 
 		//cout <<std::endl<<"--------------------"<<std::endl;
@@ -214,6 +215,7 @@ vector<vector<double>> Cluster_Euclidean_Recommend(Cluster_Struct& CLUSTERS,vect
 		Point& p = users.at(query); 	
 		vector<Distance> neighbors;
 		vector<Point>* cluster;
+		cout<<"centroids loop"<<endl;
 		for(int i = 0  ; i < centroids.size()  ;i++ ){
 			//cout<<centroids.at(i).get_id() << " != "<<p.get_centroid_id()<<endl;
 			if(centroids.at(i).get_id() == p.get_centroid_id()){
@@ -221,6 +223,7 @@ vector<vector<double>> Cluster_Euclidean_Recommend(Cluster_Struct& CLUSTERS,vect
 				break;
 			}
 		}
+		cout<<"iterate"<<endl;
 		for(vector<Point>::iterator it = cluster->begin() ; it != cluster->end() ;it++ ){
 			Point& point = *it;						
 			data_type dist = EuclideanDistance(point,p);	
@@ -232,6 +235,7 @@ vector<vector<double>> Cluster_Euclidean_Recommend(Cluster_Struct& CLUSTERS,vect
 		}		
 		comparison c;
 		equality eq;
+		cout<<"sort and erase"<<endl;
 		std::sort(neighbors.begin(),neighbors.end(),c);
 		auto last = std::unique(neighbors.begin(), neighbors.end(),eq);
 		neighbors.erase(last, neighbors.end());
@@ -242,6 +246,7 @@ vector<vector<double>> Cluster_Euclidean_Recommend(Cluster_Struct& CLUSTERS,vect
 			i++;
 			if(i == Max_neighbors)break;
 		}
+		cout<<"Calculate weighted"<<endl;
 		result.push_back(CalculateWeightedRecommendation(neighbors));	
 	}
 	return result;

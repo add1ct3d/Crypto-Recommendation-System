@@ -139,6 +139,15 @@ public:
 		return tweets;
 	}
 
+
+	void SetInfinite(){
+		sentiment_score.clear();
+		for(map<string,string>::iterator it = CryptoMap.begin(); it != CryptoMap.end(); ++it) {
+			sentiment_score[CryptoMap[it->first]] = numeric_limits<double>::infinity();			
+			artificial[CryptoMap[it->first]] = true;
+		}
+	}
+
 	map<string,double> GetCoinsVector(){
 		return sentiment_score;
 	}

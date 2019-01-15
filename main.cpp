@@ -41,6 +41,11 @@ vector<User> getVirtualUsers(string input_path,string output_path,int num_cluste
 void LSH_Recommend_Coins(vector<HashTable>& HashTables,int L,vector<User>& Users,vector<Point>& Points,int total);
 vector<vector<double>> Cluster_Euclidean_Recommend(Cluster_Struct& CLUSTERS,vector<Point>& centroids,vector<Point>& users);
 void Cluster_Recommend_Coins(Cluster_Struct& Clusters,vector<Point>& centroids,vector<User>& Users,vector<Point>& Points,int total);
+vector<vector<User>> GetPartitions(vector<User>& Users);
+vector<User> GetPartitionTraining(vector<vector<User>>& partitions , int ident);
+vector<User> GetPartitionEvaluation(vector<vector<User>>& partitions , int ident);
+void SetEvaluationInfinite(vector<User>& evaluation_set);
+
 
 void InitCryptoMap(string coins_path){
 	ifstream coins_dict;
@@ -144,13 +149,14 @@ int main(int argc , char* argv[]){
 	int K = 3;
 	int W = 350;
 	int ml = 1;
+	bool validation = false;
 	int TableSize = pow(2,K);
 	string dataset_path;
 	string semantic_path;
 	string coins_path;
 	ifstream semantic_dict;
 	ifstream coins_dict;
-	int num_clusters = 50;
+	int num_clusters = 5;
 	string output_path = "./myout.out";
 	//Initialization
 	if(argc == 1){
@@ -166,93 +172,71 @@ int main(int argc , char* argv[]){
 			coins_path.assign("./coins_queries.csv");
 			semantic_path.assign("./vader_lexicon.csv");
 		}
-		else;
+		else if(s == "-validate"){
+			validation = true;
+		}
+		else if((s == "-o")and(i != argc-1)){
+			output_path.assign(argv[i+1]);
+			i++;
+		}
 	}
 	
 	InitCryptoMap(coins_path);
-	vector<User> Users  = getRealUsers(dataset_path,output_path,semantic_path,coins_path);
-	vector<Point> Points;
-	vector<map<string,double>> UserVectors;
-	for(int i = 0 ; i < Users.size() ;i++){
-		Users.at(i).Normalize();
-		UserVectors.push_back(Users.at(i).GetCoinsVector());
-		std::map<string,double> v_map = Users.at(i).GetCoinsVector();
-		Points.push_back(Point(Users.at(i).getID(),v_map));
-		Points.back().unassign();
-	}
 
 
-	//A1
-	vector<HashTable> HashTables;
-	for(int l = 0 ; l < L ; l++){
-		HashTables.push_back(HashTable(K,TableSize,W));	
-	}
-	LSH_Build_Cosine(HashTables,L,d,Points);
-	//PrintAll(HashTables,L);
-	cout<<"A1"<<endl;
-	LSH_Recommend_Coins(HashTables,L,Users,Points,5);
+	if(validation == false){
 
-
-	//A2
-	vector<User> VirtualUsers = getVirtualUsers("./twitter_dataset_small_v2.csv","./myout.out",num_clusters,L,semantic_path,coins_path);
-	vector<Point> VirtualPoints;
-	vector<map<string,double>> VirtualVectors;
-	for(int i = 0 ; i < VirtualUsers.size() ;i++){
-		VirtualUsers.at(i).Normalize();
-		VirtualVectors.push_back(VirtualUsers.at(i).GetCoinsVector());
-		std::map<string,double> v_map = VirtualUsers.at(i).GetCoinsVector();
-		VirtualPoints.push_back(Point(VirtualUsers.at(i).getID(),v_map));
-	}
-	vector<HashTable> VirtualHashes;
-	for(int l = 0 ; l < L ; l++){
-		VirtualHashes.push_back(HashTable(K,TableSize,W));	
-	}
-	LSH_Build_Cosine(VirtualHashes,L,d,VirtualPoints);
-	//PrintAll(VirtualHashes,L);
-	cout<<"A2"<<endl;
-	LSH_Recommend_Coins(VirtualHashes,L,Users,Points,2);
-
-
-	//B1
-	vector<Point> centroids;
-	centroids = Init_Random(Points,num_clusters);
-	assert(centroids.size() == num_clusters);
-	Cluster_Struct CLUSTERS;
-	CLUSTERS.reserve(num_clusters);
-	for(int i = 0 ; i < num_clusters ; i ++){
-		CLUSTERS.push_back(new vector<Point>());
-	}
-	int loops = 0;
-	Assign_Lloyd(CLUSTERS,Points,centroids,metric);
-	data_type obj1 = ObjectiveFunction(CLUSTERS,centroids,metric,num_clusters,true);
-	while( loops < ml){
-		K_means(CLUSTERS,centroids,metric,d);
-		Assign_Lloyd(CLUSTERS,Points,centroids,metric);
-		data_type obj2 = ObjectiveFunction(CLUSTERS,centroids,metric,num_clusters,true);
-		data_type improv = (obj1 - obj2)/obj1; // if obj2 close to obj1 : improv -> 0 , else improv -> 1
-		obj1 = obj2;
-		//PrintClusters(CLUSTERS,centroids,true,output_path);
-		if(improv <= 0.05)break;
-		loops++;
-	}
-	//PrintCentroids(centroids);	
-	cout<<"B1"<<endl;
-	Cluster_Recommend_Coins(CLUSTERS,centroids,Users,Points,5);
+		vector<User> Users  = getRealUsers(dataset_path,output_path,semantic_path,coins_path);
+		vector<Point> Points;
+		vector<map<string,double>> UserVectors;
+		for(int i = 0 ; i < Users.size() ;i++){
+			Users.at(i).Normalize();
+			UserVectors.push_back(Users.at(i).GetCoinsVector());
+			std::map<string,double> v_map = Users.at(i).GetCoinsVector();
+			Points.push_back(Point(Users.at(i).getID(),v_map));
+			Points.back().unassign();
+		}
 
 
 
-	//B2
-	cout<<"B2"<<endl;
-	for(int i = 0 ; i < Points.size() ; i++){
-		Point& p = Points.at(i);
-		p.unassign(); 
-		User& u =  Users.at(i);
-		vector<Point> JointPoints = VirtualPoints;
-		vector<User> JointUsers = VirtualUsers;
-		JointUsers.push_back(u);
-		JointPoints.push_back(p);
+
+		//A1
+		/*vector<HashTable> HashTables;
+		for(int l = 0 ; l < L ; l++){
+			HashTables.push_back(HashTable(K,TableSize,W));	
+		}
+		*/
+		//LSH_Build_Cosine(HashTables,L,d,Points);
+		//PrintAll(HashTables,L);
+		//cout<<"A1"<<endl;
+		//LSH_Recommend_Coins(HashTables,L,Users,Points,5);
+
+
+		//A2
+		vector<User> VirtualUsers = getVirtualUsers("./twitter_dataset_small_v2.csv",output_path,num_clusters,L,semantic_path,coins_path);
+		vector<Point> VirtualPoints;
+		vector<map<string,double>> VirtualVectors;
+		for(int i = 0 ; i < VirtualUsers.size() ;i++){
+			VirtualUsers.at(i).Normalize();
+			VirtualVectors.push_back(VirtualUsers.at(i).GetCoinsVector());
+			std::map<string,double> v_map = VirtualUsers.at(i).GetCoinsVector();
+			VirtualPoints.push_back(Point(VirtualUsers.at(i).getID(),v_map));
+		}
+	
+
+		/*vector<HashTable> VirtualHashes;
+		for(int l = 0 ; l < L ; l++){
+			VirtualHashes.push_back(HashTable(K,TableSize,W));	
+		}
+		LSH_Build_Cosine(VirtualHashes,L,d,VirtualPoints);
+		//PrintAll(VirtualHashes,L);
+		cout<<"A2"<<endl;
+		LSH_Recommend_Coins(VirtualHashes,L,Users,Points,2);
+	*/
+
+	/*	//B1
 		vector<Point> centroids;
-		centroids = Init_Random(JointPoints,num_clusters);
+		centroids = Init_Random(Points,num_clusters);
 		assert(centroids.size() == num_clusters);
 		Cluster_Struct CLUSTERS;
 		CLUSTERS.reserve(num_clusters);
@@ -260,11 +244,11 @@ int main(int argc , char* argv[]){
 			CLUSTERS.push_back(new vector<Point>());
 		}
 		int loops = 0;
-		Assign_Lloyd(CLUSTERS,JointPoints,centroids,metric);
+		Assign_Lloyd(CLUSTERS,Points,centroids,metric);
 		data_type obj1 = ObjectiveFunction(CLUSTERS,centroids,metric,num_clusters,true);
 		while( loops < ml){
 			K_means(CLUSTERS,centroids,metric,d);
-			Assign_Lloyd(CLUSTERS,JointPoints,centroids,metric);
+			Assign_Lloyd(CLUSTERS,Points,centroids,metric);
 			data_type obj2 = ObjectiveFunction(CLUSTERS,centroids,metric,num_clusters,true);
 			data_type improv = (obj1 - obj2)/obj1; // if obj2 close to obj1 : improv -> 0 , else improv -> 1
 			obj1 = obj2;
@@ -272,13 +256,235 @@ int main(int argc , char* argv[]){
 			if(improv <= 0.05)break;
 			loops++;
 		}
-		vector<Point> point_v;
-		point_v.push_back(p);
-		Cluster_Recommend_Coins(CLUSTERS,centroids,JointUsers,point_v,2);
+		//PrintCentroids(centroids);	
+		cout<<"B1"<<endl;
+		Cluster_Recommend_Coins(CLUSTERS,centroids,Users,Points,5);
+	*/
+
+
+		//B2
+		cout<<"B2"<<endl;
+		for(int i = 0 ; i < Points.size() ; i++){
+			Point& p = Points.at(i);
+			p.unassign(); 
+			User& u =  Users.at(i);
+			vector<Point> JointPoints = VirtualPoints;
+			vector<User> JointUsers = VirtualUsers;
+			JointUsers.push_back(u);
+			JointPoints.push_back(p);
+			vector<Point> centroids;
+			cout<<"Init random"<<endl;
+			centroids = Init_Random(JointPoints,num_clusters);
+			assert(centroids.size() == num_clusters);
+			Cluster_Struct CLUSTERS;
+			CLUSTERS.reserve(num_clusters);
+			for(int i = 0 ; i < num_clusters ; i ++){
+				CLUSTERS.push_back(new vector<Point>());
+			}
+			cout<<"clusters  pushed"<<endl;
+			int loops = 0;
+			Assign_Lloyd(CLUSTERS,JointPoints,centroids,metric);
+			cout<<"assigned"<<endl;
+			data_type obj1 = ObjectiveFunction(CLUSTERS,centroids,metric,num_clusters,true);
+			cout<<"objective"<<endl;
+			while( loops < ml){
+				cout<<"loop"<<endl;
+				K_means(CLUSTERS,centroids,metric,d);
+				Assign_Lloyd(CLUSTERS,JointPoints,centroids,metric);
+				cout<<"assigned"<<endl;
+				data_type obj2 = ObjectiveFunction(CLUSTERS,centroids,metric,num_clusters,true);
+				data_type improv = (obj1 - obj2)/obj1; // if obj2 close to obj1 : improv -> 0 , else improv -> 1
+				obj1 = obj2;
+				//PrintClusters(CLUSTERS,centroids,true,output_path);
+				if(improv <= 0.05)break;
+				loops++;
+			}
+			cout<<"push p "<<endl;
+			vector<Point> point_v;
+			point_v.push_back(p);
+			cout<<"cluster recommend"<<endl;
+			Cluster_Recommend_Coins(CLUSTERS,centroids,JointUsers,point_v,2);
+		}		
+	}
+	else{
+		int count = 10;
+		vector<User> Users  = getRealUsers(dataset_path,output_path,semantic_path,coins_path);
+		vector<Point> Points;
+		vector<map<string,double>> UserVectors;
+		for(int i = 0 ; i < Users.size() ;i++){
+			Users.at(i).Normalize();
+			UserVectors.push_back(Users.at(i).GetCoinsVector());
+			std::map<string,double> v_map = Users.at(i).GetCoinsVector();
+			Points.push_back(Point(Users.at(i).getID(),v_map));
+			Points.back().unassign();
+		}
+
+		vector<vector<User>> Partitions = GetPartitions(Users);
+		double mean_error = 0;
+		for(int partition = 0 ; partition < Partitions.size() ; partition++){
+			vector<Point> NewPoints;
+			vector<map<string,double>> NewUserVectors;
+			vector<User> NewUsers =  GetPartitionTraining(Partitions,partition);
+			vector<User> EvaluationSet = GetPartitionEvaluation(Partitions,partition);
+			vector<User> Eval =  GetPartitionEvaluation(Partitions,partition);
+			for(auto&x : Eval)
+				NewUsers.push_back(x);
+
+			SetEvaluationInfinite(Eval);
+			for(int i = 0 ; i < NewUsers.size() ;i++){
+				NewUsers.at(i).Normalize();
+				NewUserVectors.push_back(NewUsers.at(i).GetCoinsVector());
+				std::map<string,double> v_map = NewUsers.at(i).GetCoinsVector();
+				NewPoints.push_back(Point(NewUsers.at(i).getID(),v_map));
+				NewPoints.back().unassign();
+			}
+				//A1
+			vector<HashTable> HashTables;
+			for(int l = 0 ; l < L ; l++){
+				HashTables.push_back(HashTable(K,TableSize,W));	
+			}
+			LSH_Build_Cosine(HashTables,L,d,NewPoints);
+			//PrintAll(HashTables,L);
+			cout<<"A1-vaidation"<<endl;
+
+			vector<vector<double>> recommendations = LSH_Cosine_Recommend(HashTables,L,NewPoints);
+			//cout<<"recommendation done"<<endl;
+			double error = 0;
+			int j = 0;
+			for(int u = NewUsers.size() - EvaluationSet.size() -1 ; u < NewUsers.size() ;u++){
+				map<string,double> sentiment_score = EvaluationSet.at(j).GetCoinsVector();
+				int c = 0;
+				for(map<string,double>::iterator it = sentiment_score.begin(); it != sentiment_score.end(); ++it) {
+					if(recommendations.at(u).size() == 0)continue;
+					double e = it->second - recommendations.at(u).at(c);
+					if(e < 0) e = -e;
+					error+=e;
+					c++;
+				}
+			}
+			//cout<<"error = "<<error<<endl;
+			mean_error += (error/100);
+		}
+		mean_error*=count;
+		cout<<"mean error ="<<mean_error/10<<endl;
+
+		mean_error = 0;
+		for(int partition = 0 ; partition < Partitions.size() ; partition++){
+			vector<Point> NewPoints;
+			vector<map<string,double>> NewUserVectors;
+			vector<User> NewUsers =  GetPartitionTraining(Partitions,partition);
+			vector<User> EvaluationSet = GetPartitionEvaluation(Partitions,partition);
+			vector<User> Eval =  GetPartitionEvaluation(Partitions,partition);
+			for(auto&x : Eval)
+				NewUsers.push_back(x);
+
+			SetEvaluationInfinite(Eval);
+			for(int i = 0 ; i < NewUsers.size() ;i++){
+				NewUsers.at(i).Normalize();
+				NewUserVectors.push_back(NewUsers.at(i).GetCoinsVector());
+				std::map<string,double> v_map = NewUsers.at(i).GetCoinsVector();
+				NewPoints.push_back(Point(NewUsers.at(i).getID(),v_map));
+				NewPoints.back().unassign();
+			}
+
+			vector<Point> centroids;
+			centroids = Init_Random(NewPoints,num_clusters);
+			assert(centroids.size() == num_clusters);
+			Cluster_Struct CLUSTERS;
+			CLUSTERS.reserve(num_clusters);
+			for(int i = 0 ; i < num_clusters ; i ++){
+				CLUSTERS.push_back(new vector<Point>());
+			}
+			int loops = 0;
+			Assign_Lloyd(CLUSTERS,NewPoints,centroids,metric);
+			data_type obj1 = ObjectiveFunction(CLUSTERS,centroids,metric,num_clusters,true);
+			while( loops < ml){
+				K_means(CLUSTERS,centroids,metric,d);
+				Assign_Lloyd(CLUSTERS,NewPoints,centroids,metric);
+				data_type obj2 = ObjectiveFunction(CLUSTERS,centroids,metric,num_clusters,true);
+				data_type improv = (obj1 - obj2)/obj1; // if obj2 close to obj1 : improv -> 0 , else improv -> 1
+				obj1 = obj2;
+				if(improv <= 0.05)break;
+				loops++;
+			}			
+			cout<<"B1-validate"<<endl;
+			vector<vector<double>> recommendations = Cluster_Euclidean_Recommend(HashTables,L,NewPoints);
+			double error = 0;
+			int j = 0;
+			for(int u = NewUsers.size() - EvaluationSet.size() -1 ; u < NewUsers.size() ;u++){
+				map<string,double> sentiment_score = EvaluationSet.at(j).GetCoinsVector();
+				int c = 0;
+				for(map<string,double>::iterator it = sentiment_score.begin(); it != sentiment_score.end(); ++it) {
+					if(recommendations.at(u).size() == 0)continue;
+					double e = it->second - recommendations.at(u).at(c);
+					if(e < 0) e = -e;
+					error+=e;
+					c++;
+				}
+			}
+			//cout<<"error = "<<error<<endl;
+			mean_error += (error/100);
+		}
+		mean_error*=count;
+		cout<<"mean error ="<<mean_error/10<<endl;
+
+
+
 	}
 	return 0;
 }
 
+
+
+vector<vector<User>> GetPartitions(vector<User>& Users){
+	int users_num = Users.size();
+	int partition_size = users_num/10;
+	vector<int> idents ;
+	for(int i = 0 ; i < users_num; i++){
+		idents.push_back(i);
+	}
+
+	vector<vector<User>> partitions;
+	random_shuffle(idents.begin(),idents.end());
+	int last = 0;
+	int old = last;
+	for(int i = 0 ; i < 10 ; i++){
+		
+		old = last;
+		last += partition_size ; 
+		cout<<"last = "<<last<<endl;
+		vector<User> partition;
+		for(int j = old ; j < last ; j++ ){
+
+			partition.push_back(Users.at(idents.at(j)));
+		}
+		partitions.push_back(partition);
+	}
+	return partitions;
+}
+
+
+vector<User> GetPartitionTraining(vector<vector<User>>& partitions , int ident){
+	
+	vector<User> TrainSet;
+	for(int i = 0 ; i < partitions.size() ; i++){
+		if(i == ident)continue;
+		for(auto& u : partitions.at(i)){
+			TrainSet.push_back(u);
+		}
+	}
+	return TrainSet;
+}
+
+vector<User> GetPartitionEvaluation(vector<vector<User>>& partitions , int ident){
+	return partitions.at(ident);
+}
+
+void SetEvaluationInfinite(vector<User>& evaluation_set){
+	for(auto& u : evaluation_set){
+		u.SetInfinite();
+	}
+}
 
 
 vector<User> getRealUsers(string input_path,string output_path,string semantic_path,string coins_path){	
@@ -288,6 +494,7 @@ vector<User> getRealUsers(string input_path,string output_path,string semantic_p
 	int n  = -1;
 	int old_user_id = -1;
 	dataset.open(input_path.c_str());
+	int items = 0;
 	if (dataset.is_open()){
 		string line;
 		while ( getline (dataset,line)){
@@ -312,8 +519,10 @@ vector<User> getRealUsers(string input_path,string output_path,string semantic_p
 				Users.back().AddTweet(Tweet(tweet_id,line),semantic_path,coins_path);
 				old_user_id = stol(user_id);
 				n++;
-				if(n > 200)break;
+				//if(n > 200)break;
 			}
+			items++;
+			if(items > 200)break;
 		}
 		dataset.close();
 	}
@@ -407,6 +616,9 @@ string semantic_path,string coins_path){
 	return VirtualUsers;
 }
 
+	
+
+
 
 
 void LSH_Recommend_Coins(vector<HashTable>& HashTables,int L,vector<User>& Users,vector<Point>& Points,int total_coins){
@@ -456,7 +668,7 @@ void LSH_Recommend_Coins(vector<HashTable>& HashTables,int L,vector<User>& Users
 
 void Cluster_Recommend_Coins(Cluster_Struct& Clusters,vector<Point>& centroids,
 	vector<User>& Users,vector<Point>& Points,int total_coins){
-
+	cout<<"cluster euclidean"<<endl;
 	vector<vector<double>> recommendations = Cluster_Euclidean_Recommend(Clusters,centroids,Points);
 	assert(recommendations.size() == Users.size());
 	for(int i = 0 ; i < Users.size() ; i++){
